@@ -1,54 +1,40 @@
 const choices = ["rock", "paper", "scissors"];
-
 let round = 1;
 let humanScore = 0;
 let computerScore = 0;
 let humanChoice;
 let computerChoice;
 
-const getComputerSelection = function () {
+const getComputerSelection = () => {
     let rand = Math.floor(Math.random() * 3);
     return choices[rand];
 }
 
-const getHumanSelection = function () {
-    let choice;
-    do {
-        choice = prompt("Enter your choice").toLowerCase();
-    } while ((choice && !choices.includes(choice)));
-    return choice;
-}
+const options = document.querySelector("#options");
+options.addEventListener("click", (e) => {
+    let humanSelection;
+    if (e.target.id === "rock") {
+        humanSelection = "rock";
+    } else if (e.target.id === "paper") {
+        humanSelection = "paper";
+    } else if (e.target.id === "scissors") {
+        humanSelection = "scissors";
+    }
+    playRound(humanSelection, getComputerSelection());
+})
 
 function playRound(humanChoice, computerChoice) {
+    const display = document.querySelector("#display");
     if (humanChoice === computerChoice) {
-        console.log("Draw.");
+        display.textContent = "draw";
     } else if (
         (humanChoice === "rock" && computerChoice === "scissors") ||
         (humanChoice === "paper" && computerChoice === "rock") ||
         (humanChoice === "scissors" && computerChoice === "paper")) {
         humanScore++;
-        console.log(`${humanChoice} beats ${computerChoice}`);
+        display.textContent = `${humanChoice} beats ${computerChoice}`;
     } else {
         computerScore++;
-        console.log(`${computerChoice} beats ${humanChoice}`);
+        display.textContent = `${computerChoice} beats ${humanChoice}`;
     }
 }
-
-function checkWinner() {
-    while (round <= 5) {
-        humanChoice = getHumanSelection();
-        computerChoice = getComputerSelection();
-        playRound(humanChoice, computerChoice);
-        round++;
-    }
-
-    if (humanScore === computerChoice) {
-        console.log(`Human scores: ${humanScore}\nComputer scores ${computerScore}\nDraw!`);
-    } else if (humanScore > computerScore) {
-        console.log(`Human scores: ${humanScore}\nComputer scores ${computerScore}\nHuman won!`);
-    } else {
-        console.log(`Computer scores ${computerScore}\nHuman scores: ${humanScore}\nComputer won!`);
-    }
-}
-
-checkWinner()
